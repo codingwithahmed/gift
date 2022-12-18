@@ -12,6 +12,12 @@ import {
   Avatar,
 } from "@shopify/polaris";
 import { TitleBar, useNavigate, Loading } from "@shopify/app-bridge-react";
+import {
+  settings as recoil_settings
+} from '../states/index'
+import { useRecoilState } from "recoil";
+
+
 
 export default function HomePage() {
 
@@ -23,7 +29,7 @@ export default function HomePage() {
   const isRefetching = false
  // const settings = []
 
-  const settings = [
+  /*const settings = [
     {
         id:1,
         url : 'settings/12',
@@ -52,8 +58,9 @@ export default function HomePage() {
   status : 'Active-Not',
   type : 'Single',
 }
-]
+] */
 
+const [settings,setSettings] = useRecoilState(recoil_settings)
 
 
 
@@ -72,19 +79,19 @@ export default function HomePage() {
 
 
 
-  const emptyStateMarkup = !isLoading && !settings?.length ? (
+  const emptyStateMarkup = (
     <EmptyState 
         heading="Create A New Setting For Uploading Images"
         action={{
           content: "Create New Setting",
-          onAction : () => alert("Something")
+          onAction : () => navigate(`/settings/create-settings`)
         }}
 
         image = "https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
         >
         <p>Note : Setting are used to set rules for uploading image like you can set mask or u can request a certain dimmension image</p>
     </EmptyState>
-  ) : null
+  ) 
 
 
 //-------------------------------------JSX FUNCTIONS -----------------------------
@@ -117,7 +124,20 @@ export default function HomePage() {
   }
 
 
-  
+  if (settings.length < 1 ) {
+    return <Page>
+      <TitleBar title="Gifty" primaryAction={{
+        content:"Rate US 🌟",
+        onAction: () => navigate('/')
+      }} />
+
+      <Card sectioned>
+
+           {emptyStateMarkup}
+            
+      </Card>
+    </Page>
+  }  
 
   return (
     <Page narrowWidth>

@@ -1,7 +1,9 @@
 import { BrowserRouter } from "react-router-dom";
 import { NavigationMenu } from "@shopify/app-bridge-react";
 import Routes from "./Routes";
-
+import {
+  RecoilRoot
+} from 'recoil'
 import {
   AppBridgeProvider,
   QueryProvider,
@@ -16,6 +18,7 @@ export default function App() {
   return (
     <PolarisProvider>
       <BrowserRouter>
+      <RecoilRoot>
         <AppBridgeProvider>
           <QueryProvider>
             <NavigationMenu
@@ -29,6 +32,7 @@ export default function App() {
             <Routes pages={pages} />
           </QueryProvider>
         </AppBridgeProvider>
+      </RecoilRoot>
       </BrowserRouter>
     </PolarisProvider>
   );
