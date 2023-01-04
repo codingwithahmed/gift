@@ -12,14 +12,19 @@ import {
     Select,
     Heading
 } from '@shopify/polaris'
+
+
 import { TitleBar } from "@shopify/app-bridge-react";
+
 
 import {
     useState,
     useCallback,
     useEffect
 } from 'react'
-
+import {
+    hsv2Rgb
+} from 'colorsys'
 
 export default function Create_Settings () {
     const breadcrumbs = [{ content: "Gifty", url: "/" }];
@@ -29,7 +34,45 @@ export default function Create_Settings () {
             selected : 'polygon',
             isVisible : false
         },
-        conditions : []
+        conditions : [],
+        button_text : {
+            text : 'Add To Card',
+            size : 18,
+            alignment : 'left',
+            label : 'Uplaod For Adding To Cart',
+            color : {
+                hue: 300,
+                brightness: 1,
+                saturation: 0.7,
+                alpha: 0.7,
+              },
+            bold : true,
+            rgb : {
+                r : 0,
+                g : 0,
+                b : 0
+            }
+        },
+        button_bg : {
+            transparent : true,
+            color : {
+                hue: 300,
+                brightness: 1,
+                saturation: 0.7,
+              },
+              rgb :  {
+                r : 0,
+                g : 0,
+                b : 0
+            }
+        },
+        other : {
+            all_pages : false,
+            order_page : {
+                show_dashboard : false,
+                images_include_top : false 
+            }
+        }
     })
     
     useEffect(() => {
@@ -37,12 +80,10 @@ export default function Create_Settings () {
     },[settings])
    
 
-    const [color,setColor] = useState({
-        hue: 300,
-        brightness: 1,
-        saturation: 0.7,
-        alpha: 0.7,
-      });
+    const styles = {
+        
+    background : String('hsl('+settings.button_bg.color.hue + '%,'+settings.button_bg.color.saturation+'%,'+settings.button_bg.color.brightness+'%);' ) 
+    };
 
       const options = [{
         label:'Product Title',
@@ -89,6 +130,20 @@ const masks = [
     }
 ]
 
+
+const alignmentOptions = [    {
+    label : 'Left',
+    value : 'left'
+},
+{
+    label : 'Center',
+    value : 'center'
+},
+{
+    label: 'Right',
+    value : 'right'
+}]
+
 const handleMaskDropDown = useCallback((e) => {
         console.log("E -> ",e)
        setSettings({
@@ -100,7 +155,7 @@ const handleMaskDropDown = useCallback((e) => {
        })
 
        console.log("Settings Updated : ",settings.mask)
-},[settings.mask])
+},[settings])
 
 const handleMaskVisibilty = useCallback((e) => {
     console.log('E ---> ',e)
@@ -113,7 +168,7 @@ const handleMaskVisibilty = useCallback((e) => {
         }
     })
     console.log("CHECK SETTING : ",settings.mask)
-},[settings.mask])
+},[settings])
 
 const handleName = useCallback((e) => {
     setSettings({
@@ -145,7 +200,7 @@ const handleConditionIn =  useCallback((e,i) => {
         conditions : newArr
     })
     console.log("Conditions : ",settings.conditions)
-},[settings.conditions])
+},[settings])
 
 const handleConditionInclude =  useCallback((e,i) => {
     const newArr = settings.conditions 
@@ -156,7 +211,131 @@ const handleConditionInclude =  useCallback((e,i) => {
         conditions : newArr
     })
     console.log("Conditions : ",settings.conditions)
-},[settings.conditions])
+},[settings])
+
+const handleTextButton = useCallback((e) => {
+    setSettings({
+        ...settings,
+        button_text : {
+            ...settings.button_text,
+            text : e
+        }
+    })
+},[settings])
+
+const handleTextSizeButton = useCallback((e) => {
+    setSettings({
+        ...settings,
+        button_text : {
+            ...settings.button_text,
+            size : e
+        }
+    })
+},[settings])
+
+
+const handleTextLabelButton = useCallback((e) => {
+     setSettings({
+        ...settings,
+        button_text : {
+            ...settings.button_text,
+            label : e
+        }
+    })
+},[settings])
+
+const handleTextAlignment = useCallback((e) => {
+    setSettings({
+        ...settings,
+        button_text : {
+            ...settings.button_text,
+            alignment : e
+        }
+    })
+},[settings])
+
+const handleBoldnessButtonText = useCallback((e) => {
+    setSettings({
+        ...settings,
+        button_text : {
+            ...settings.button_text,
+            bold : e
+        }
+    })
+},[settings])
+const handleColorText = useCallback((e) => {
+    console.log("COLOR UPDATED : ", e )
+    const {hue,saturation,brightness} = e
+    setSettings({
+        ...settings,
+        button_text : {
+            ...settings.button_text,
+            color : e,
+            rgb : hsv2Rgb(hue,saturation,brightness)
+        }
+    })
+},[settings])
+
+const handleBGButton = useCallback((e) => {
+    const {hue,saturation,brightness} = e
+
+    setSettings({
+        ...settings,
+        button_bg : {
+            ...settings.button_bg,
+            color : e,
+            rgb : hsv2Rgb(hue,saturation,brightness)
+        }
+    })
+},[settings])
+
+const handleTransparentbgButtton = useCallback((e) => {
+    setSettings({
+        ...settings,
+        button_bg : {
+            ...settings.button_bg,
+            transparent : e
+        }
+    })
+},[settings])
+
+
+const handleAllProductDispaly = useCallback ((e) => { 
+    setSettings({
+        ...settings,
+        other : {
+            ...settings.other,
+            all_pages : e
+        }
+    })
+},[settings])
+
+
+const handleOtherTOP  = useCallback ((e) => { 
+    setSettings({
+        ...settings,
+        other : {
+            ...settings.other,
+             order_page : {
+                ...settings.other.order_page,
+                images_include_top : e
+             }
+        }
+    })
+},[settings])
+
+const handleOtherOD = useCallback ((e) => { 
+    setSettings({
+        ...settings,
+        other : {
+            ...settings.other,
+             order_page : {
+                ...settings.other.order_page,
+                show_dashboard : e
+             }
+        }
+    })
+},[settings])
 
 /* 
 
@@ -189,7 +368,7 @@ const condition_markup = <Stack alignment='center'>
                     title="Create New Setting"
                     breadcrumbs = {breadcrumbs}
                     primaryAction={{
-                        content:"Rate US 🌟",
+                        content:"Save",
                         onAction: () => navigate('/')
                     }} />
                 <Layout sectioned>
@@ -248,32 +427,40 @@ const condition_markup = <Stack alignment='center'>
                                     </Card.Section>
 
 
-                                    <Card.Section title='Button Text Settings'>
+                                    <Card.Section title='Button Settings'>
                                                 <Card.Subsection>
-                                                    <TextField label='Text' placeholder='Upload' />
+                                                    <TextField label='Text' value={settings.button_text.text} onChange={handleTextButton} placeholder='Enter Button Text' />
                                                 </Card.Subsection>
                                                 <Card.Subsection>
                                                     <Stack distribution='equalSpacing' vertical alignment='left' >
                                                         <Stack.Item>
-                                                            <TextField label='Size' type='number' placeholder='1' />
+                                                            <TextField value={settings.button_text.size} onChange={handleTextSizeButton} label='Size' type='number' placeholder='1' />
+                                                        </Stack.Item>
+
+                                                        <Stack.Item>
+                                                            <TextField label='Label Text' onChange={handleTextLabelButton} value={settings.button_text.label} />
                                                         </Stack.Item>
 
 
+
                                                         <Stack.Item>
-                                                            <Heading>Alignment</Heading>
-                                                            <ButtonGroup segmented  fullWidth>
-                                                                <Button>Right</Button>
-                                                                <Button>Center</Button>
-                                                                <Button>Left</Button>
-                                                            </ButtonGroup>
-                                                        </Stack.Item>  
+                                                            
+                                                            <Select options={alignmentOptions} onChange={handleTextAlignment} value={settings.button_text.alignment} label='Alignment' />
+
+                                                        </Stack.Item>
+
+                                                        <Stack.Item>
+                                                             <Checkbox checked={settings.button_text.bold} onChange={handleBoldnessButtonText} value={settings.button_text.bold} label="Bold" />
+                                                        </Stack.Item>
                                                     </Stack>
+                                                        
+
                                                 </Card.Subsection>
                                                 <br />
                                                 <Stack.Item>
                                                     <Heading>Text Color</Heading>
                                                     <Card.Subsection>
-                                                        <ColorPicker  onChange={setColor} color={color} allowAlpha />
+                                                        <ColorPicker  onChange={handleColorText} color={settings.button_text.color} allowAlpha />
                                                     </Card.Subsection>
                                                 </Stack.Item>
                                     </Card.Section>
@@ -283,13 +470,15 @@ const condition_markup = <Stack alignment='center'>
                                         <Stack vertical>
                                             
                                             <Stack.Item>
-                                                <Checkbox label='Transparent' />
+                                                <Checkbox onChange={handleTransparentbgButtton} checked={settings.button_bg.transparent}  label='Transparent' />
                                             </Stack.Item>
-
-                                            <Stack.Item>
-                                                <Heading>Background Color</Heading>
-                                                <ColorPicker color={color}  />
-                                            </Stack.Item>
+                                        {
+                                            !settings.button_bg.transparent ?  <Stack.Item>
+                                            <Heading>Background Color</Heading>
+                                            <ColorPicker onChange={handleBGButton} color={settings.button_bg.color}  />
+                                        </Stack.Item> : ''
+                                        }
+                                           
 
 
                                         </Stack>
@@ -302,9 +491,31 @@ const condition_markup = <Stack alignment='center'>
                                 <Layout.Section>
                                         <Card title='Preview' sectioned>
                                                 <Card.Section>
-                                                    <div>
-                                                        <button>Upload</button>
-                                                        <label>Upload Button label</label>
+
+                                                    <div style={{
+                                                        display:'flex',
+                                                        flexDirection:"column",
+                                                        textAlign : settings.button_text.alignment
+                                                    }}>
+                                                        
+                                                        
+                                                        <button style={{
+                                                            backgroundColor : settings.button_bg.transparent ? 'transparent' : `rgb(${settings.button_bg.rgb.r},${settings.button_bg.rgb.g},${settings.button_bg.rgb.b})`,
+                                                            border: settings.button_bg.transparent ? '' : "none",
+                                                            padding :settings.button_text.size * .4,
+                                                            cursor : "pointer",
+                                                            color : `rgb(${settings.button_text.rgb.r},${settings.button_text.rgb.g },${settings.button_text.rgb.b},${settings.button_text.color.alpha})`,
+                                                            marginBottom : settings.button_text.size * .4,
+                                                            
+
+                                                        }} ><p style={{
+                                                            fontSize : settings.button_text.size * 1,
+                                                            fontWeight : settings.button_text.bold ? 'bold' : ''
+                                                        }}>{settings.button_text.text}</p></button>
+                                                        <label style={{
+                                                             fontSize : settings.button_text.size * .7
+                                                        }}>{settings.button_text.label}</label>
+                                                        <input type={'color'} />
                                                     </div>
                                                 </Card.Section>
                                         </Card>
@@ -342,10 +553,10 @@ const condition_markup = <Stack alignment='center'>
                                                     <Stack vertical>
                                                         <Subheading>Settings For Orders</Subheading>
                                                         <Stack.Item>
-                                                            <Checkbox label='Show On Order Dashobard' />
+                                                            <Checkbox onChange={handleOtherOD} checked={settings.other.order_page.show_dashboard} label='Show On Order Dashobard' />
                                                         </Stack.Item>
                                                         <Stack.Item>
-                                                            <Checkbox label='Images Name should include time of purchases' />
+                                                            <Checkbox onChange={handleOtherTOP} checked={settings.other.order_page.images_include_top} label='Images Name should include time of purchases' />
                                                         </Stack.Item>                                                        
 
                                                     </Stack>
@@ -355,7 +566,7 @@ const condition_markup = <Stack alignment='center'>
                                                     <Stack vertical>
                                                         <Subheading>What pages to show on</Subheading>
                                                         <Stack.Item>
-                                                            <Checkbox label='Show On All Products' />
+                                                            <Checkbox checked={settings.other.all_pages} onChange={handleAllProductDispaly} label='Show On All Products' />
                                                         </Stack.Item>
                                                     </Stack>
                                                 </Card.Subsection>
