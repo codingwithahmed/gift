@@ -22,9 +22,7 @@ import {
     useCallback,
     useEffect
 } from 'react'
-import {
-    hsv2Rgb
-} from 'colorsys'
+
 
 export default function Create_Settings () {
     const breadcrumbs = [{ content: "Gifty", url: "/" }];
@@ -39,32 +37,20 @@ export default function Create_Settings () {
             text : 'Add To Card',
             size : 18,
             alignment : 'left',
-            label : 'Uplaod For Adding To Cart',
-            color : {
-                hue: 300,
-                brightness: 1,
-                saturation: 0.7,
-                alpha: 0.7,
-              },
+            label : '* Upload For Adding To Cart',
+            color : '#fffffff',
             bold : true,
-            rgb : {
-                r : 0,
-                g : 0,
-                b : 0
-            }
+            labelColor : '#FF0000'
         },
         button_bg : {
             transparent : true,
-            color : {
-                hue: 300,
-                brightness: 1,
-                saturation: 0.7,
-              },
-              rgb :  {
-                r : 0,
-                g : 0,
-                b : 0
-            }
+            color : '#000000',
+            border : {
+                color : '#000000',
+                size : 4,
+                hidden : true
+            },
+            
         },
         other : {
             all_pages : false,
@@ -264,30 +250,43 @@ const handleBoldnessButtonText = useCallback((e) => {
     })
 },[settings])
 const handleColorText = useCallback((e) => {
-    console.log("COLOR UPDATED : ", e )
-    const {hue,saturation,brightness} = e
+  //  console.log("COLOR UPDATED : ", e )
+  //  const {hue,saturation,brightness} = e
     setSettings({
         ...settings,
         button_text : {
             ...settings.button_text,
-            color : e,
-            rgb : hsv2Rgb(hue,saturation,brightness)
+            color : e.target.value,
+      //      rgb : hsv2Rgb(hue,saturation,brightness)
         }
     })
 },[settings])
 
 const handleBGButton = useCallback((e) => {
-    const {hue,saturation,brightness} = e
-
+    console.log('E ====> ',e.target.value)
     setSettings({
         ...settings,
         button_bg : {
             ...settings.button_bg,
-            color : e,
-            rgb : hsv2Rgb(hue,saturation,brightness)
+            color : e.target.value,
+           // rgb : hsv2Rgb(hue,saturation,brightness)
         }
     })
 },[settings])
+
+
+const handleLabelColor = useCallback((e) => {
+  //  console.log('E ====> ',e.target.value)
+    setSettings({
+        ...settings,
+        button_text : {
+            ...settings.button_text,
+            labelColor : e.target.value,
+           // rgb : hsv2Rgb(hue,saturation,brightness)
+        }
+    })
+},[settings])
+
 
 const handleTransparentbgButtton = useCallback((e) => {
     setSettings({
@@ -299,6 +298,45 @@ const handleTransparentbgButtton = useCallback((e) => {
     })
 },[settings])
 
+const handleBorderColor = useCallback((e) => {
+    setSettings({
+        ...settings,
+        button_bg : {
+            ...settings.button_bg,
+            border : {
+                ...settings.button_bg.border,
+                color : e.target.value
+            }
+        }
+    })
+},[settings])
+
+
+const handleBorderSize = useCallback((e) => {
+    setSettings({
+        ...settings,
+        button_bg : {
+            ...settings.button_bg,
+            border : {
+                ...settings.button_bg.border,
+                size : e
+            }
+        }
+    })
+},[settings])
+
+const handleBorderHidden = useCallback((e) => {
+    setSettings({
+        ...settings,
+        button_bg : {
+            ...settings.button_bg,
+            border : {
+                ...settings.button_bg.border,
+                hidden : e
+            }
+        }
+    })
+},[settings])
 
 const handleAllProductDispaly = useCallback ((e) => { 
     setSettings({
@@ -460,7 +498,14 @@ const condition_markup = <Stack alignment='center'>
                                                 <Stack.Item>
                                                     <Heading>Text Color</Heading>
                                                     <Card.Subsection>
-                                                        <ColorPicker  onChange={handleColorText} color={settings.button_text.color} allowAlpha />
+                                                        <input type={'color'} value={settings.button_text.color} onChange={handleColorText} />
+                                                    </Card.Subsection>
+                                                </Stack.Item>
+
+                                                <Stack.Item>
+                                                    <Heading>Label Color</Heading>
+                                                    <Card.Subsection>
+                                                        <input type={'color'} value={settings.button_text.labelColor} onChange={handleLabelColor} />
                                                     </Card.Subsection>
                                                 </Stack.Item>
                                     </Card.Section>
@@ -475,14 +520,41 @@ const condition_markup = <Stack alignment='center'>
                                         {
                                             !settings.button_bg.transparent ?  <Stack.Item>
                                             <Heading>Background Color</Heading>
-                                            <ColorPicker onChange={handleBGButton} color={settings.button_bg.color}  />
+                                            <input type={'color'} value={settings.button_bg.color} onChange={handleBGButton} />
                                         </Stack.Item> : ''
                                         }
-                                           
+
+                                      
+                                        
+
 
 
                                         </Stack>
                                     </Card.Section>
+
+                                    
+                                    <Card.Section title='Border Settings' >
+                                            <Stack vertical>
+                                            <Stack.Item>
+                                            <Checkbox label='Border Hidden' checked={settings.button_bg.border.hidden} onChange={handleBorderHidden} />
+                                        </Stack.Item>
+
+                                        {
+                                            settings.button_bg.border.hidden ? '' : (<>
+                                        <Stack.Item>
+                                                <TextField value={settings.button_bg.border.size} onChange={handleBorderSize} type='number' label="Border Size" />
+                                        </Stack.Item>
+                                           
+                                        <Stack.Item>
+                                            <Heading>Border Color</Heading>
+                                            <input value={settings.button_bg.border.color} onChange={handleBorderColor} type={'color'} />
+                                        </Stack.Item></>
+                                            )
+                                        }
+                                            </Stack>
+                                    </Card.Section>
+
+
                                 </Card>
                         </Layout.Section>
                         </Stack.Item>
@@ -500,22 +572,24 @@ const condition_markup = <Stack alignment='center'>
                                                         
                                                         
                                                         <button style={{
-                                                            backgroundColor : settings.button_bg.transparent ? 'transparent' : `rgb(${settings.button_bg.rgb.r},${settings.button_bg.rgb.g},${settings.button_bg.rgb.b})`,
-                                                            border: settings.button_bg.transparent ? '' : "none",
+                                                            backgroundColor : settings.button_bg.transparent ? 'transparent' : settings.button_bg.color,
                                                             padding :settings.button_text.size * .4,
                                                             cursor : "pointer",
-                                                            color : `rgb(${settings.button_text.rgb.r},${settings.button_text.rgb.g },${settings.button_text.rgb.b},${settings.button_text.color.alpha})`,
+                                                            color : settings.button_text.color,
                                                             marginBottom : settings.button_text.size * .4,
-                                                            
+                                                            borderWidth : `${settings.button_bg.border.size * 1}px`,
+                                                            borderStyle : 'solid',
+                                                            borderColor: settings.button_bg.border.color,
+                                                            border : settings.button_bg.border.hidden ? '0px solid transparent' : `${settings.button_bg.border.size * 1}px solid ${settings.button_bg.border.color}`
 
                                                         }} ><p style={{
                                                             fontSize : settings.button_text.size * 1,
                                                             fontWeight : settings.button_text.bold ? 'bold' : ''
                                                         }}>{settings.button_text.text}</p></button>
                                                         <label style={{
-                                                             fontSize : settings.button_text.size * .7
+                                                             fontSize : settings.button_text.size * .7,
+                                                             color : settings.button_text.labelColor
                                                         }}>{settings.button_text.label}</label>
-                                                        <input type={'color'} />
                                                     </div>
                                                 </Card.Section>
                                         </Card>
