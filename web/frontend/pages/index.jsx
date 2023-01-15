@@ -29,7 +29,7 @@ export default function HomePage() {
   const isRefetching = false
  // const settings = []
 
-  /*const settings = [
+  const settings = [
     {
         id:1,
         url : 'settings/12',
@@ -58,9 +58,9 @@ export default function HomePage() {
   status : 'Active-Not',
   type : 'Single',
 }
-] */
+] 
 
-const [settings,setSettings] = useRecoilState(recoil_settings)
+//const [settings,setSettings] = useRecoilState(recoil_settings)
 
 
 
@@ -180,7 +180,7 @@ const [settings,setSettings] = useRecoilState(recoil_settings)
                             source={'https://burst.shopifycdn.com/photos/freelance-designer-working-on-laptop.jpg?width=746'}
                           />
                         } onClick={() => navigate(`/settings/create-settings`)}>
-                              <Stack spacing="extraLoose" alignment="center" distribution="trailing">
+                              <Stack spacing="extraLoose" alignment="center" distribution="fillEvenly">
                                   <Stack.Item >
                                     <Heading> {name}</Heading>
                                   </Stack.Item>

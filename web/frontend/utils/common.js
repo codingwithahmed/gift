@@ -28,3 +28,18 @@ export const hsl2rgb = (h,s,l) =>
    let f= (n,k=(n+h/30)%12) => l - a*Math.max(Math.min(k-3,9-k,1),-1);
    return [f(0),f(8),f(4)];
 }   
+
+
+
+export const removeOneIndex = (array,i) => {
+    const newArr = [];
+
+    for (let index = 0; index < array.length; index++) {
+        if(i != index) {
+            const element = array[index];
+            newArr.push(element)
+        }
+    }
+    // console.log(newArr)
+    return newArr
+}

@@ -23,44 +23,14 @@ import {
     useEffect
 } from 'react'
 import { removeOneIndex } from '../../utils/common';
+import { example_setting } from '../../states';
 
 
-export default function Create_Settings () {
+export default function Setting_Page({
+    setting = example_setting
+}) {
     const breadcrumbs = [{ content: "Gifty", url: "/" }];
-    const [settings,setSettings] = useState({
-        name : 'Untitled',
-        mask : {
-            selected : 'polygon',
-            isVisible : false
-        },
-        conditions : [],
-        button_text : {
-            text : 'Add To Card',
-            size : 18,
-            alignment : 'left',
-            label : '* Upload For Adding To Cart',
-            color : '#fffffff',
-            bold : true,
-            labelColor : '#FF0000'
-        },
-        button_bg : {
-            transparent : true,
-            color : '#000000',
-            border : {
-                color : '#000000',
-                size : 4,
-                hidden : true
-            },
-            
-        },
-        other : {
-            all_pages : false,
-            order_page : {
-                show_dashboard : false,
-                images_include_top : false 
-            }
-        }
-    })
+    const [settings,setSettings] = useState(example_setting)
     
     useEffect(() => {
         console.log("Effect Setting : ",settings)
@@ -416,7 +386,7 @@ const condition_markup = <Stack alignment='center'>
 
     return <Page>
             	<TitleBar
-                    title="Create New Setting"
+                    title="Setting"
                     breadcrumbs = {breadcrumbs}
                     primaryAction={{
                         content:"Save",
